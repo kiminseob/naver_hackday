@@ -1,0 +1,57 @@
+{% extends 'myHome/layout.html' %}
+{% load search_content %}
+{% load static %}
+{% block content %}
+	{# 검색된 검색어를 검색창에 유지한다. #}
+	<script type="text/javascript"> 
+		URL = decodeURIComponent('{{request.get_full_path}}');
+		if(URL.split("searchInput=")[1]!=undefined){
+			URL=URL.replace(/\+/g," ");
+			URL=URL.replace(/\&/,"").replace("amp;","");
+			searchInput=URL.split("searchInput=")[1];
+			document.getElementById("searchInput").value = searchInput;
+		}
+	</script>
+	{# 메인 화면(홈)의 body 부분이다. 홈과 검색된 내역을 보여준다.#}
+	<div id="main" role="main">
+		<ul id="tiles">
+			{% if request.get_full_path|search_input_check%}
+				{% for broadcast in request.get_full_path|search:broadcasts%}
+					<li>
+						<form id="contents{{broadcast.id}}" name="contents{{broadcast.id}}" action="contents.html" method="get">
+							<div class="post-info" onclick="moveContent('contents{{broadcast.id}}')">
+								<div class="post-basic-info">
+									<h3><a href="#">{{broadcast.title}}</a></h3>
+									<p>{{broadcast.content|truncatewords:15}}</p><!--15단어만 출력-->
+									<p>{{broadcast.uploadDate}} </p>
+								</div>
+							</div>
+							<input id="title" type="hidden" name="content_title" value="{{broadcast.title}}"></input>
+							<input id="content" type="hidden" name="contents" value="{{broadcast.content}}"></input>
+						</form>
+					</li>
+				{% endfor %}
+			{% else %}
+				<div id="center">
+					<h1 class="ml7">
+					  <span class="text-wrapper">
+						<span class="letters">2018 NAVER CAMPUS HACKDAY</span><br/>
+					  </span>
+					  <span class="text-wrapper">
+						<span class="letters">GOOD LOOK!</span><br/>
+					 </span>
+					 
+					</h1>
+				</div>	
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+					<script src="{%static 'js/homeText.js' %}"></script>
+			{% endif %}
+		</ul>
+	</div>
+	{# 기사 클릭 시 contents.html으로 기사제목과 내용을 폼으로 전송한다. #}
+	<script type="text/javascript">
+		function moveContent(frm){
+			document.getElementById(frm).submit();
+		}
+	</script>
+{% endblock %}

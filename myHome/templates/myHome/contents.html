@@ -1,0 +1,24 @@
+{% extends 'myHome/layout.html' %}
+{% block content %}
+	<div class="single-page">
+		<div class="single-page-artical">
+				<div class="artical-content">
+					<!--<img src="images/single-post-pic.jpg" title="banner1">-->
+					<h3><a href="#" id="title"></a></h3>
+					<p id="content"></p> 
+				</div>
+			<div class="clear"> </div>
+		</div>
+	</div>
+	<script>
+		history.replaceState({},null,location.pathname);
+		URL = decodeURIComponent('{{request.get_full_path}}');
+		URL=URL.replace(/\+/g," ");
+		URL=URL.replace(/\&/,"").replace("amp;","");
+		URL_pram=URL.split("content_title=")[1].split("contents=")
+		title = URL_pram[0]
+		content = URL_pram[1]
+		document.getElementById("title").innerHTML = title;
+		document.getElementById("content").innerHTML = content;
+	</script>
+{% endblock %}
