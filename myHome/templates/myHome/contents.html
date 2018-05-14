@@ -20,5 +20,11 @@
 		content = URL_pram[1]
 		document.getElementById("title").innerHTML = title;
 		document.getElementById("content").innerHTML = content;
+		
+		function locationHashChanged() {
+			alert("뒤로가기")
+			javascript:history.back(-1); 
+		}
+		window.onhashchange = locationHashChanged;
 	</script>
 {% endblock %}

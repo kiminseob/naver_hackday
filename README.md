@@ -16,18 +16,18 @@ Bootstrap
 
 ***
 
-# 진행상황 18.5.11
+# 진행상황 18.5.13
 ## 크롤러
 뽐뿌 뉴스 항목(방송/연예, 라이프/여행, IT/취업, 스포츠, 정치/경제)중 방송/연예 부분 테스트용 50개 기사 크롤링
 ## 검색 서비스
-1. 수집 : 방송/연예 부분 기사 (to do : 나머지 기사 모두, 시간이 되면 이미지까지 수집해보자 )  
+1. 수집 : 방송/연예 부분 기사 (to do : 나머지도 )  
 2. 정제 : 기사 제목, 기사 내용, 기사 업로드 날짜, 기사 ID  
 3. 색인 : ( to do : 역인덱스 방법에 도전 )  
 4. 검색 : 검색어를 추출 후, 공백을 기준으로 키워드를 구분함. 키워드가 기사의 제목 또는 내용과 일치하는 query가 있으면 해당 query를 합하여 queryset을 넘겨주어 웹에 출력
 ## database model  
 1. 방송/연예 model  
 기사ID : id = models.IntegerField(primary_key=True)  
-기사항목 : category = models.CharField(max_length=10)  
+기사항목 : category = models.CharField(max_length=10) 
 기사제목 : title = models.TextField(max_length=100)  
 기사내용 : content = models.TextField()  
 기사업로드날짜 : uploadDate = models.CharField(max_length=10)  
