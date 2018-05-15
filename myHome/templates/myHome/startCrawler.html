@@ -1,0 +1,11 @@
+{% extends 'myHome/layout.html' %}
+{% load controlCrawler %}
+
+{% block content %}
+	{% start %}
+	<script type="text/javascript">
+		alert("크롤러를 동작합니다.")
+		window.location="/naver_crawler_search/index.html"
+	</script>
+	
+{% endblock %}

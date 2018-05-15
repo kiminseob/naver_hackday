@@ -2,9 +2,11 @@ from urllib import parse
 from django import template
 from django.db.models import Q
 from myHome.models import NEWS_BROADCAST
+from django.contrib.postgres.search import SearchVector
 #from konlpy.tag import Twitter
 import re
 register = template.Library()
+
 '''
 검색어가 포함된 URL과 queryset이 넘어오면
 URL에서 검색어를 추출 후, 공백을 기준으로 키워드를 구분한다.
@@ -25,8 +27,10 @@ def queryset_search(URL, model):
 	for keyword in keywords:
 		q_objects.add(Q(content__contains=keyword), Q.OR)
 		q_objects.add(Q(title__contains=keyword), Q.OR)
+
 	queryset = NEWS_BROADCAST.objects.filter(q_objects)
 	queryset_len = queryset.count()
+
 	if not queryset:
 		return False
 	queryset = queryset.order_by('-id')  #기사 최신순 정렬.

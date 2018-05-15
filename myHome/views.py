@@ -15,9 +15,9 @@ def index(request):
 def contents(request):
 	return render(request,'myHome/contents.html',{})
 
-
-def collectData(request):
-	runCrawler.start()
-	return render(request,'myHome/index.html',{})
+def startCrawler(request):
+	return render(request,'myHome/startCrawler.html',{})		
 		
+def stopCrawler(request):
+	return render(request,'myHome/stopCrawler.html',{})	
 		

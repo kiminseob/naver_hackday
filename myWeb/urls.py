@@ -20,5 +20,6 @@ urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('naver_crawler_search/index.html',views.index),
 	path('naver_crawler_search/contents.html',views.contents),
-	path('collectData/',views.collectData)
+	path('naver_crawler_search/startCrawler.html',views.startCrawler),
+	path('naver_crawler_search/stopCrawler.html',views.stopCrawler)
 ]

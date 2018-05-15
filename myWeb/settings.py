@@ -66,7 +66,8 @@ TEMPLATES = [
 				
             ],
 			'libraries':{
-				'search_content': 'myHome.templatetags.search_content'
+				'search_content': 'myHome.templatetags.search_content',
+				'controlCrawler': 'myHome.templatetags.controlCrawler'
 			}
         },
     },
