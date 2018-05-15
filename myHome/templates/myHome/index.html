@@ -34,33 +34,22 @@
 						<script src="{%static 'js/homeText.js' %}"></script>
 				<!--일치하는 검색어가 DB에 존재할 경우-->
 				{% else %}
-					<!--일치하는 기사 갯수만큼 리스트를 만들어 화면에 출력해준다
-					    50개가 넘는 경우에는 50개씩 제한을 두어 출력한다-->
-					<script>count=0</script>
-					{% if context.queryset_length > 50 %}
-						{% for broadcast in context.broadcasts %}
-							<li>
-								<form id="contents{{broadcast.id}}" name="contents{{broadcast.id}}" action="contents.html" method="get">
-									<div class="post-info" onclick="moveContent('contents{{broadcast.id}}')">
-										<div class="post-basic-info">
-											<h3><a href="#">{{broadcast.title}}</a></h3>
-											<p>{{broadcast.content|truncatewords:15}}</p><!--15단어만 출력-->
-											<p>{{broadcast.uploadDate}} </p>
-										</div>
+					<!--일치하는 기사 갯수만큼 리스트를 만들어 화면에 출력해준다-->
+					{% for broadcast in context.broadcasts %}
+						<li>
+							<form id="contents{{broadcast.id}}" name="contents{{broadcast.id}}" action="contents.html" method="get">
+								<div class="post-info" onclick="moveContent('contents{{broadcast.id}}')">
+									<div class="post-basic-info">
+										<h3><a href="#">{{broadcast.title}}</a></h3>
+										<p>{{broadcast.content|truncatewords:15}}</p><!--15단어만 출력-->
+										<p>{{broadcast.uploadDate}} </p>
 									</div>
-									<input id="title" type="hidden" name="content_title" value="{{broadcast.title}}"></input>
-									<input id="content" type="hidden" name="contents" value="{{broadcast.content}}"></input>
-								</form>
-							</li>
-							<script type="text/javascript">
-								count+=1
-								if(count==50){
-									alert(count)
-									showList()
-								}
-							</script>
-						{% endfor %}
-					{% endif %}
+								</div>
+								<input id="title" type="hidden" name="content_title" value="{{broadcast.title}}"></input>
+								<input id="content" type="hidden" name="contents" value="{{broadcast.content}}"></input>
+							</form>
+						</li>
+					{% endfor %}
 					<script> document.getElementById("count").innerHTML = '{{ context.queryset_length }}'+"개의 검색 결과가 있습니다." </script>
 				{% endif %}
 			<!--메인 화면-->
