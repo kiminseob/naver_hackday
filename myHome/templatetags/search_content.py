@@ -2,7 +2,7 @@ from urllib import parse
 from django import template
 from django.db.models import Q
 from myHome.models import NEWS_BROADCAST
-from myHome.sorting import sort
+from myHome.sorting import Sort
 import re
 register = template.Library()
 
@@ -52,6 +52,7 @@ def queryset_search(URL, model):
 		queryset = queryset.order_by('-id')
 	#정확도 순 : 일치하는 키워드의 갯수가 많은 순서(제목,내용)
 	elif sort=="accuracy":
+		global queryset
 		i=0
 		id = [0 for _ in range(queryset.count())]
 		count =  [0 for _ in range(queryset.count())]
@@ -71,7 +72,15 @@ def queryset_search(URL, model):
 			match_cnt.__setitem__("id",id)
 			match_cnt.__setitem__("count",cnt)
 			i+=1
-		sorting(match_cnt)	
+		Sort.quickSort(match_cnt.get("count"),match_cnt.get("id"),0,match_cnt.get("id").__len__()-1)
+		temp = Q() 
+		for i in range(match_cnt.get("id").__len__()-1,0,-1):
+			a = int(match_cnt.get("id")[i])
+			temp.add(Q(pk=a),Q.OR)
+		
+		queryset = NEWS_BROADCAST.objects.filter(temp)
+		print(queryset)		
+					
 	context = {'broadcasts':queryset,'queryset_length':queryset.count(), 'keywords':keywords}
 	return context
 
@@ -137,12 +146,16 @@ def sort(URL):
 		URL = parse.unquote(URL)
 		print(URL)
 		sort = URL.split("sort=")[1]
-		print(sort)
-		print("dddd")
+		if sort=="recent":
+			return False
+		elif sort=="accuracy":
+			return True
 		return sort
 	except IndexError as e:
 		print("정렬반환{0}".format(e))
 		return False
+
+
 
 
 

@@ -72,7 +72,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<select name="sort">
 						 {% sort request.get_full_path as sort %}	
 						  <option value="recent"{% if not sort%}selected="selected"{% endif %}>최신순</option>
-						  <option value="accuracy"{% if sort == accuracy%}selected="selected"{% endif %}>정확도</option>
+						  <option value="accuracy"{% if sort %}selected="selected"{% endif %}>정확도</option>
 						</select>
 
 					</form>

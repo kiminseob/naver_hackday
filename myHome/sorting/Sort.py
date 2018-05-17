@@ -1,5 +1,3 @@
-
-
 def partition(alist,blist, start, end):
     pivot = alist[start]
     left = start+1
@@ -36,5 +34,3 @@ def quickSort(alist,blist, start, end):
         quickSort(alist,blist, pivot+1, end)
 
     return alist
-	
- 
