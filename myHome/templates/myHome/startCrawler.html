@@ -2,9 +2,13 @@
 {% load controlCrawler %}
 
 {% block content %}
-	{% start %}
+	{% start as state %}
 	<script type="text/javascript">
+		{% if state %}
 		alert("크롤러를 동작합니다.")
+		{% else %}
+		alert("뽐뿌 서버가 터져부렸슴다..")
+		{% endif %}
 		window.location="/naver_crawler_search/index.html"
 	</script>
 	

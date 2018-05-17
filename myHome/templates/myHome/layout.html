@@ -7,6 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 {% load staticfiles %}
 {% load controlCrawler %}
+{% load search_content %}
 <html>
 	<head>
 		<title>naver crawler_search</title>
@@ -60,6 +61,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="top-searchbar">
 					<form id="search" action="index.html" method="get">
 						<input id="searchInput" name="searchInput" type="text" value=""/><input type="submit" value="" />
+						<select name="year">
+						  {% year request.get_full_path as year %}
+						  <option value="all" {% if not year%}selected="selected"{% endif %}>전체(년)</option>
+						  <option value="2018"{% if year == 2018%}selected="selected"{% endif %}>2018</option>
+						  <option value="2017"{% if year == 2017%}selected="selected"{% endif %}>2017</option>
+						  <option value="2016"{% if year == 2016%}selected="selected"{% endif %}>2016</option>
+						  <option value="2015"{% if year == 2015%}selected="selected"{% endif %}>2015</option>
+						</select>
+						<select name="sort">
+						 {% sort request.get_full_path as sort %}	
+						  <option value="recent"{% if not sort%}selected="selected"{% endif %}>최신순</option>
+						  <option value="accuracy"{% if sort == accuracy%}selected="selected"{% endif %}>정확도</option>
+						</select>
+
 					</form>
 					</br>
 					<p id="count"></p>

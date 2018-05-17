@@ -16,9 +16,9 @@ def start():
     헤더에 Accept-Encoding을 지정하여, 요청 시에 해당 헤더를 제외시켜서 gzip 압축을 하지 않도록 한다.
     Accept-Encoding은 requests.get함수에서 자동으로 세팅하는 함수
 	'''
-	URL = "http://www.ppomppu.co.kr/recent_main_article.php?type=news" #뽐뿌 뉴스 url
-	ppomppu_developerForum_html=requests.get(URL, headers = {'Accept-Encoding': None})
-	soup = bs(ppomppu_developerForum_html.text, "html.parser")
+	URL = "http://www.ppomppu.co.kr/recent_main_article.php" #뽐뿌 뉴스 url
+	ppomppu_developerForum_html=requests.get(URL, headers = {'Accept-Encoding': None},params= { "type": "news"})
+	soup = bs(ppomppu_developerForum_html.content, "lxml")
 	p = re.compile("&no=")  # 기사 별로 컨텐츠 갯수를 추려냄
 	try:
 		for i in range(6):
@@ -28,15 +28,11 @@ def start():
 				title_ul = soup.findAll('ul', {'class': 'ppomppu_board02'})[i-3] #뉴스 테이블 2열
 			title_link = title_ul.findAll('a')[1].get('href') #게시물 최신 링크주소를 가져온다.
 			title_num[i] = p.split(title_link)[1] # 각 뉴스 별 게시물 총 갯수 추출
-	
-		#print(title_num[0])
+
 		divided_index=round(int(title_num[0])/8)
 		page=(divided_index/20)+1   #기사가 있는 페이지 번호
 		count=divided_index%20  #해당 페이지의 count 번째 기사
 		divide = int(title_num[0])-divided_index
-		#print("divided_index : %f"%(divided_index))
-		#print("page : %d"%(page))
-		#print("count : %d"%(count))
 		next_page=page
 		next_count=count
 		for i in range(8):
@@ -59,14 +55,10 @@ def start():
 			proc.daemon = False
 			process_list.append(proc)
 			proc.start()
-
-		'''
-		for i in range(len(process_list)):
-			process_list[i].terminate()
-			process_list[i].join() #자식 프로세스의 종료를 기다린다.
-		'''
+		return True
 	except IndexError as e:
-		return "뽐뿌 사이트 다운됨.."
+		print(e)
+		return False
 
 def emptyQ():
 	global q
@@ -76,10 +68,11 @@ def terminate_process():
 	global process_list
 	for i in range(len(process_list)):
 		process_list[i].terminate()
-			
+
 def clearQ():
-	global q
+	global q,process_list
 	q =Queue()
+	process_list=[]
 
 def sizeQ():
 	global q

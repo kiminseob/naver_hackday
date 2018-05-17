@@ -7,8 +7,7 @@ register = template.Library()
 @register.simple_tag
 def start():
 	try:
-		q=runCrawler.start()
-		return True
+		return runCrawler.start()
 	except IndexError as e:
 		return False
 		

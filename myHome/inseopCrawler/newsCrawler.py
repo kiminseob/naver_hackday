@@ -24,13 +24,34 @@ def broadcast(title_num,end_num, page_num,count,q): #기사 제목,내용,날짜
 			count=1
 			page_num+=1
 			uploaded =uploadDate(url_params,page_num)  #페이지 넘어갈 때마다 20개의 기사 업로드 날짜 크롤링
+
+		print("프로세스 pid : {0} 기사 {1}번 수집".format(os.getpid(), i))
+		q.put("pid:{0} 기사:{1}".format(os.getpid(), i))
+		url_params.__setitem__("page", page_num)  # 기사 페이지
+		url_params.__setitem__("no", i)  # 기사 번호
+		news_broadcast_html = requests.get(URL, headers={'Accept-Encoding': None},
+										   params=url_params)  # 방송/연예 기사 웹문서 가져온다.
+		soup = bs(news_broadcast_html.content, "lxml")
+		view_title = soup.find("td", {"class": "view_title"})
+		view_content = soup.findAll("table", {"class": "pic_bg"})
+		title = ""
+		content = ""
+		if view_title != None:
+			title = soup.find("td", {"class": "view_title"}).text.strip()  # 방송/연예 기사의 제목
+			if view_content:
+				content = view_content[3].find("table").text.strip()  # 방송/연예 기사의 내용
+				# DB에 저장
+				wdTable = NEWS_BROADCAST(id=i, category="방송/연예", title=title, content=content,
+										 uploadDate=uploaded[count - 1].text, updateDate=datetime.now())
+				wdTable.save()
+		'''
 		try:
 			row = NEWS_BROADCAST.objects.get(pk=i)
-			print("%d번 : 지나친다~~~"%(i))
+			print("프로세스 pid : {0} 기사 {1}번 건너 뜀".format(os.getpid(),i))
 			continue
 		except Exception as e:
-			print("들어옴")
-			q.put("{0}번 프로세스 : {1}번 기사 수집".format(os.getpid(),i))
+			print("프로세스 pid : {0} 기사 {1}번 수집".format(os.getpid(),i))
+			q.put("pid:{0} 기사:{1}".format(os.getpid(),i))
 			url_params.__setitem__("page",page_num) #기사 페이지
 			url_params.__setitem__("no", i)         #기사 번호
 			news_broadcast_html = requests.get(URL, headers = {'Accept-Encoding': None}, params=url_params) #방송/연예 기사 웹문서 가져온다.
@@ -43,16 +64,16 @@ def broadcast(title_num,end_num, page_num,count,q): #기사 제목,내용,날짜
 				title = soup.find("td", {"class": "view_title"}).text.strip()  # 방송/연예 기사의 제목
 				if view_content:
 					content = view_content[3].find("table").text.strip() # 방송/연예 기사의 내용
-			#DB에 저장
-			wdTable = NEWS_BROADCAST(id=i, category="방송/연예", title=title, content=content,uploadDate=uploaded[count-1].text,updateDate=datetime.now())
-			wdTable.save()
-
+					#DB에 저장
+					wdTable = NEWS_BROADCAST(id=i, category="방송/연예", title=title, content=content,uploadDate=uploaded[count-1].text,updateDate=datetime.now())
+					wdTable.save()
+		'''
 #   방송/연예 기사 올라온 날짜 크롤링   #
 def uploadDate(url_params, page_num):
 	URL = "http://www.ppomppu.co.kr/zboard/zboard.php" #방송/연예 기사 테이블
 	url_params.__setitem__("page",page_num)
 	new_table = requests.get(URL, headers = {'Accept-Encoding': None}, params=url_params)
-	soup = bs(new_table.text,"html.parser")
+	soup = bs(new_table.content,"lxml")
 	dates = soup.findAll('span',{'class':'gallery_data'})
 	return dates
 	

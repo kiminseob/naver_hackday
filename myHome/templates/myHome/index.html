@@ -5,12 +5,11 @@
 	<!-- 검색된 검색어를 검색창에 유지한다. -->
 	<script type="text/javascript"> 
 		URL = decodeURIComponent('{{request.get_full_path}}');
-		if(URL.split("searchInput=")[1]!=undefined){
-			URL=URL.replace(/\+/g," ");
-			URL=URL.replace(/\&/,"").replace("amp;","");
-			searchInput=URL.split("searchInput=")[1];
-			document.getElementById("searchInput").value = searchInput;
-		}
+		URL = URL.split("searchInput=")[1]
+		URL=URL.replace(/\+/g," ");
+		URL=URL.replace(/\&/,"").replace("amp;","");
+		searchInput = URL.split("year=")[0]
+		document.getElementById("searchInput").value = searchInput;
 	</script>
 	<!--메인 화면(홈)의 body 부분이다. 홈화면 또는 검색된 내역을 보여준다. -->
 	<div id="main" role="main">
@@ -40,15 +39,26 @@
 							<form id="contents{{broadcast.id}}" name="contents{{broadcast.id}}" action="contents.html" method="get">
 								<div class="post-info" onclick="moveContent('contents{{broadcast.id}}')">
 									<div class="post-basic-info">
-										<h3><a href="#">{{broadcast.title}}</a></h3>
-										<p>{{broadcast.content|truncatewords:15}}</p><!--15단어만 출력-->
+										<h3><a href="#" id = "title{{broadcast.id}}">{{broadcast.title}}</a></h3>
+										<p id="content{{broadcast.id}}">{{broadcast.content|truncatewords:15}}</p><!--15단어만 출력-->
 										<p>{{broadcast.uploadDate}} </p>
 									</div>
 								</div>
 								<input id="title" type="hidden" name="content_title" value="{{broadcast.title}}"></input>
 								<input id="content" type="hidden" name="contents" value="{{broadcast.content}}"></input>
+								<input id="keywords" type="hidden" name="keywords" value="{{context.keywords}}"></input>
 							</form>
 						</li>
+						<script type="text/javascript">
+							{% for keyword in context.keywords %}
+							   	   var a = document.getElementById("title{{broadcast.id}}").innerHTML;
+							   	   var b = document.getElementById("content{{broadcast.id}}").innerHTML;
+								   a = a.replace(/{{keyword}}/g,"<mark>{{keyword}}</mark>")
+								   b = b.replace(/{{keyword}}/g,"<mark>{{keyword}}</mark>")
+								   document.getElementById("title{{broadcast.id}}").innerHTML = a;
+								   document.getElementById("content{{broadcast.id}}").innerHTML = b;
+						   {% endfor %}
+						</script>
 					{% endfor %}
 					<script> document.getElementById("count").innerHTML = '{{ context.queryset_length }}'+"개의 검색 결과가 있습니다." </script>
 				{% endif %}
@@ -60,7 +70,7 @@
 						<span class="letters">2018 NAVER CAMPUS HACKDAY</span><br/>
 					  </span>
 					  <span class="text-wrapper">
-						<span class="letters">GOOD LOOK!</span><br/>
+						<span class="letters">CRAWLER SEARCH</span><br/>
 					 </span>
 					</h1>
 				</div>	
