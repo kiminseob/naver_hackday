@@ -2,6 +2,7 @@
 {% load search_content %}
 {% load static %}
 {% block content %}
+	{% apache %}
 	<!-- 검색된 검색어를 검색창에 유지한다. -->
 	<script type="text/javascript"> 
 		URL = decodeURIComponent('{{request.get_full_path}}');

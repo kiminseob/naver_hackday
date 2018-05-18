@@ -25,7 +25,7 @@ SECRET_KEY = '52%$k8f%19jke_jt=yc+xa+le*&cwe3+jrmncz710*$v5@n6=3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['106.10.40.150']
+ALLOWED_HOSTS = ['106.10.40.150','hackday001']
 
 
 # Application definition
