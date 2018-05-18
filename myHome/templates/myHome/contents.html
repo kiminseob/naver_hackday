@@ -1,0 +1,45 @@
+{% extends 'myHome/layout.html' %}
+{% load search_content %}
+{% block content %}
+	<div class="single-page">
+		<div class="single-page-artical">
+				<div class="artical-content">
+					<!--<img src="images/single-post-pic.jpg" title="banner1">-->
+					<h3><a href="#" id="title"></a></h3>
+					<p id="content"></p> 
+				</div>
+			<div class="clear"> </div>
+		</div>
+	</div>
+	<script>
+		//history.replaceState({},null,location.pathname);
+		URL = decodeURIComponent('{{request.get_full_path}}');
+		URL=URL.replace(/\+/g," ");
+
+		URL=URL.replace(/\&/,"").replace("amp;","");
+		URL_pram=URL.split("content_title=")[1].split("contents=")
+		title = URL_pram[0] //제목
+
+		URL_pram=URL_pram[1].split("keywords=")
+		content = URL_pram[0].replace(/\&/,"").replace("amp;",""); //내용
+		document.getElementById("title").innerHTML=title;
+		document.getElementById("content").innerHTML=content;
+
+		{% keywords request.get_full_path as context %}
+		{% for keyword in context.keywords %}
+		   var a = document.getElementById("title").innerHTML;
+		   var b = document.getElementById("content").innerHTML;
+		   a = a.replace(/{{keyword}}/g,"<mark>{{keyword}}</mark>")
+		   b = b.replace(/{{keyword}}/g,"<mark>{{keyword}}</mark>")
+		   document.getElementById("title").innerHTML = a;
+		   document.getElementById("content").innerHTML = b;
+		   document.getElementById("searchInput").value = document.getElementById("searchInput").value +'{{keyword}}'+ " "
+		{% endfor %}
+
+
+		function locationHashChanged() {
+			javascript:history.back(-1);
+		}
+		window.onhashchange = locationHashChanged;
+	</script>
+{% endblock %}
