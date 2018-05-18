@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # hackday_crawler_search
 2018 Campus Hackday :)
 =======
@@ -156,4 +155,3 @@ model : NEWS_BROADCAST
 
 
 
->>>>>>> f6079a02c6156256e9fc0f24ea7ea9c96f86d7df
